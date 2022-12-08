@@ -8,11 +8,11 @@ function start()
     let systemSize = 70000000
     let requiredSpace = 30000000
     sizeCalculator(tree)
-    // console.log(traverseAndFindSize(tree, 100000))
+    /console.log('Part 1 : ' + traverseAndFindSize(tree, 100000))
     let availableSpace = systemSize - tree['/'].size
     let freeUpSpace = requiredSpace - availableSpace
-    console.log(findDirectoriesToDelete(tree, freeUpSpace))
-    console.log(Math.min(...findDirectoriesToDelete(tree, freeUpSpace)))
+    // console.log(findDirectoriesToDelete(tree, freeUpSpace))
+    console.log('Part 2 : ' + Math.min(...findDirectoriesToDelete(tree, freeUpSpace)))
     
 }
 
