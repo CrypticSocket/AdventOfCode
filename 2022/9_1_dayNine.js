@@ -1,4 +1,4 @@
-let input = `R 4
+let input1 = `R 4
 U 4
 L 3
 D 1
@@ -7,7 +7,7 @@ D 1
 L 5
 R 2`
 
-start()
+let trackerCounter = new Set() 
 
 class Position
 {
@@ -24,17 +24,18 @@ class Position
     }
 }
 
+
 function start()
 {
     let data = input.split('\n')
-    let visitedGrid = getVisitedGrid(data)
-    DrawTracker(visitedGrid)
+    getVisitedGrid(data)
+    console.log(trackerCounter)
 }
 
 function getVisitedGrid(data)
 {
-    let T = new Position(0,0)
     let H = new Position(0,0)
+    let T = new Position(0,0)
 
     let tailTracker = []
 
@@ -44,23 +45,17 @@ function getVisitedGrid(data)
         let [direction,steps] = step.split(' ')
         for(let i = 0; i < steps; i++)
         {
-            let headMovement = MakeMovement(direction)
+            let headMovement = CheckMovement(direction)
             H.MakeMovement(headMovement)
-            CheckRequiredMovement(H, T)
-            AddTailPosition(tracker, T)
+            let tailMovement = CheckRequiredMovement(H, T)
+            T.MakeMovement(tailMovement)
+            AddTailPosition(tailTracker, T)
         }
     })
-
-    return tailTracker;
 }
 
 function AddTailPosition(tracker, Tail) {
-    if(!tracker[Tail.row])
-    {
-        tracker[Tail.row] = []
-    }
-
-    tracker[Tail.column] = '#'
+    trackerCounter.add(Tail.row + ',' + Tail.column)
 }
 
 
@@ -88,18 +83,15 @@ function CheckMovement(direction)
 
 function CheckRequiredMovement(Head, Tail)
 {
+    let p = new Position(0, 0)
     let rowChange = Head.row - Tail.row
-    rowChange = rowChange/Math.abs(rowChange)
     let columnChange = Head.column - Tail.column
-    columnChange = columnChange/Math.abs(columnChange)
-
-    return new Position(rowChange, columnChange)
-}
-
-function DrawTracker(tracker) 
-{
-    for(let i = tracker.length; i > 0; i--)
+    if(Math.abs(rowChange) > 1 || Math.abs(columnChange) > 1)
     {
-        console.log(tracker[i].reverse())
+        p.row = rowChange == 0 ? 0 : rowChange/Math.abs(rowChange)
+        p.column = columnChange == 0 ? 0 : columnChange/Math.abs(columnChange)
     }
+    return p
 }
+
+start()

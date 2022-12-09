@@ -2093,7 +2093,6 @@ function CheckRequiredMovement(Head, Tail)
     {
         p.row = rowChange == 0 ? 0 : rowChange/Math.abs(rowChange)
         p.column = columnChange == 0 ? 0 : columnChange/Math.abs(columnChange)
-        
     }
     return p
 }
