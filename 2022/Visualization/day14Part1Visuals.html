@@ -4,13 +4,44 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Sand Fall</title>
 </head>
 <body>
+    <style>
+        body{
+            background-color: #AAA;
+        }
+        .text{
+            font-family: monospace; 
+            font-size: 5em; 
+            line-height: 0.5em;
+            text-align: center;
+            border: 1px solid black;
+        }
+
+        .sand{
+            font-weight: bold; 
+            color: orange;
+        }
+
+        .rock{
+            font-weight: 800; 
+            color: #000;
+        }
+
+        .space{
+            font-weight: lighter; 
+            color: #AAA;
+        }
+
+        .spawn{
+            color: blueviolet;
+        }
+    </style>
+
     <button onclick="start()">Part 1</button>
-    <button onclick="start2()">Part 2</button>
-    <p style="font-size: 2em; ">Sand Count : <span id="sandCountText" style="font-weight: bold; color: red;">0</span></p>
-    <p id="visualizeSand" style="font-family: monospace; font-size: 1em; line-height: 0.7em;"></p>
+    <p style="font-size: 2em; text-align: center;">Sand Count : <span id="sandCountText" style="font-weight: bold; color: red;">0</span></p>
+    <p id="visualizeSand" class="text"></p>
     <script src="../14_1_dayFourteen.js"></script>
 </body>
 </html>

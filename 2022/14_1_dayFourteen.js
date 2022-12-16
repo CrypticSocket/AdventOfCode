@@ -197,7 +197,7 @@ async function startSand(sandSourceCoordinate, mapLimits, map, rockCoordinates)
             {
                 y++
             }
-            await timer(10)
+            await timer(50)
         }
         stringifiedCoordinates.push(x + ',' + y)
         map = addSandToMap(x, y, map, mapLimits)
@@ -210,7 +210,7 @@ async function startSand(sandSourceCoordinate, mapLimits, map, rockCoordinates)
 function ShowOnMap(map, x, y, limits, sandCount)
 {
     let showMap = addSandToMap(x, y, map, limits)
-    visualizeText.innerText = showMap.map(x => x.join('')).join('\n')
+    visualizeText.innerHTML = showMap.map(x => x.join('')).join('<br>')
     sandCountText.innerText = sandCount
 }
 
@@ -220,7 +220,7 @@ function addSandToMap(x, y, map, mapLimits)
     let xMin = mapLimits[0][0]
     let yMin = mapLimits[1][0]
 
-    newMap[y - yMin][x - xMin] = 'o'
+    newMap[y - yMin][x - xMin] = '<span class="sand">&#9632</span>'
 
     return newMap
 }
@@ -249,18 +249,18 @@ function drawMap(coordinates, sandSourceCoordinate, mapLimits) {
         for (let j = xMinMax[0]; j <= xMinMax[1]; j++) {
             if(stringifiedCoordinates.includes(j + ',' + i))
             {
-                map[i - yMinMax[0]][j - xMinMax[0]] = '#'
+                map[i - yMinMax[0]][j - xMinMax[0]] = '<span class="rock">&#9632</span>'
             }
             else
             {
-                map[i - yMinMax[0]][j - xMinMax[0] ] = '.'
+                map[i - yMinMax[0]][j - xMinMax[0] ] = '<span class="space">&#9632</span>'
             }
         }  
     }
 
-    map[sandSourceCoordinate[1] - yMinMax[0]][sandSourceCoordinate[0] - xMinMax[0]] = '+'
+    map[sandSourceCoordinate[1] - yMinMax[0]][sandSourceCoordinate[0] - xMinMax[0]] = '<span class="spawn">&#9632</span>'
 
-    visualizeText.innerText = map.map(x => x.join('')).join('\n')
+    visualizeText.innerHTML = map.map(x => x.join('')).join('<br>')
     return map
 }
 
@@ -314,7 +314,7 @@ function getCoordinates(data) {
 
 function start() {
     alert("Starting")
-    let data = input.split('\n').map(x => x.split(' -> '))
+    let data = input1.split('\n').map(x => x.split(' -> '))
     let rockCoordinates = getCoordinates(data)
     let sandSourceCoordinate = [500, 0]
     let mapLimits = getMapLimits(rockCoordinates, sandSourceCoordinate)
