@@ -1,11 +1,3 @@
-/*
-
-Learning here was to look for edge conditions.
-I broke my head for 45 minutes even though I had my answer in 10 minutes.
-The edge condition here was to add a . at the end of the input line or if the number were at the end of the line, it would get skipped.
-
-*/
-
 let dummyInput = `
 467..114..
 ...*......
@@ -18,8 +10,7 @@ let dummyInput = `
 ...$.*....
 .664.598..`
 
-let actualInput = `
-......124..................418.......587......770...........672.................564............................438..........512......653....
+let actualInput = `......124..................418.......587......770...........672.................564............................438..........512......653....
 665/...*......................*599.....*.983......794*..140..*...........@..963*....................445........*......*.........709.....*...
 .......246.....581......701..........108....%.532........../.73..699...927............................*....579.354.464..............298..86.
 ........................*.....@...............%........$............+.........167..................408............................$..*......
@@ -169,15 +160,15 @@ var dummyInput2 = `
 var findSymbolPositions = function(data)
 {
     let symbolPositions = []
-    let i = 0, j = 0
+    let i = 0, j = 0, id = 0
     for(let line of data)
     {
         for(let chr of line)
         {
             
-            if(isNaN(chr) && chr != '.')
+            if(chr == '*')
             {
-                symbolPositions.push({row : i, col : j})
+                symbolPositions.push({id : id++, row : i, col : j})
             }
             j++
         }
@@ -189,7 +180,7 @@ var findSymbolPositions = function(data)
 
 var findAdjacentNumbers = function(data, symbolPositions)
 {
-    let adjacentNumbers = []
+    let gearNumbers = {}
     let i = 0
     for(let line of data)
     {
@@ -206,8 +197,15 @@ var findAdjacentNumbers = function(data, symbolPositions)
             {
                 if(number.length > 0)
                 {
-                    let symbolFound = symbolPositions.filter(symbol => symbol.row >= i-1 && symbol.row <= i+1 && symbol.col >= index - number.length - 1 && symbol.col <= index).length > 0
-                    if(symbolFound) adjacentNumbers.push(parseInt(number))
+                    let symbolFound = symbolPositions.filter(symbol => symbol.row >= i-1 && symbol.row <= i+1 && symbol.col >= index - number.length - 1 && symbol.col <= index)
+                    if(symbolFound.length > 0)
+                    {
+                        for(let symbol of symbolFound)
+                        {
+                            if(!gearNumbers[symbol.id]) gearNumbers[symbol.id] = []
+                            gearNumbers[symbol.id].push(number)
+                        }
+                    }
                     number = ''
                 }
             }
@@ -215,7 +213,7 @@ var findAdjacentNumbers = function(data, symbolPositions)
         }
         i++
     }
-    return adjacentNumbers.reduce((a,b) => a + b)
+    return Object.values(gearNumbers).filter(gear => gear.length == 2).map(gearRatios => gearRatios.reduce((a,b) => a*b)).reduce((a,b) => a + b)
 }
 
 var formatInput = function(input)
