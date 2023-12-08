@@ -1,7 +1,11 @@
 /*
 Learnings: 
-Using "!!someArray" to shorthand whether the array has items or not can get bad very easily
-It's better to just write a few letters and not get confused.
+If input is a range, it's easy to work entirely with ranges.
+What I did was, used the range method for seeds but processed it the same way as part 1 and messed up.
+Later I realised my mistake, then made a silly logical error when "midIsIn" condition was true.
+After 12 hours of debugging, I got it
+
+It's always better to try a dummy input to find edgecases and mistakes beyond what is given.
 */
 
 let dummyInput = `seeds: 79 14 55 13
@@ -236,9 +240,42 @@ humidity-to-location map:
 2076410046 3934637989 167468928
 1727865346 4102106917 192860379`
 
+var dummyInput2 = `seeds: 0 11 50 11 81 20
+
+seed-to-soil map:
+0 86 10
+
+soil-to-fertilizer map:
+5 5 11
+45 45 11
+75 75 21
+
+fertilizer-to-water map:
+49 53 8
+0 11 42
+42 0 7
+57 7 4
+
+water-to-light map:
+88 18 7
+18 25 70
+
+light-to-temperature map:
+45 77 23
+81 45 19
+68 64 13
+
+temperature-to-humidity map:
+0 69 1
+1 0 69
+
+humidity-to-location map:
+60 56 37
+56 93 4`
+
 var formatData = function(data)
 {
-    let seeds = data[0].split(':')[1].trim().split(' ').map(Number)
+    let seeds = processSeeds(data[0].split(':')[1].trim().split(' ').map(Number))
     let seedToSoil = data[1].split(':')[1].trim().split('\n').map(o => o.split(' ').map(Number))
     let soilToFert = data[2].split(':')[1].trim().split('\n').map(o => o.split(' ').map(Number))
     let fertToWater = data[3].split(':')[1].trim().split('\n').map(o => o.split(' ').map(Number))
@@ -247,65 +284,98 @@ var formatData = function(data)
     let tempToHumid = data[6].split(':')[1].trim().split('\n').map(o => o.split(' ').map(Number))
     let humidToLoc = data[7].split(':')[1].trim().split('\n').map(o => o.split(' ').map(Number))
 
-    let usefulMap = []
-    filterUsefulData(seeds, seedToSoil, usefulMap, 'seed', 'soil')
-    let soils = usefulMap.map(o => o.soil)
-    filterUsefulData(soils, soilToFert, usefulMap, 'soil', 'fert')
-    let ferts = usefulMap.map(o => o.fert)
-    filterUsefulData(ferts, fertToWater, usefulMap, 'fert', 'water')
-    let waters = usefulMap.map(o => o.water)
-    filterUsefulData(waters, waterToLight, usefulMap, 'water', 'light')
-    let lights = usefulMap.map(o => o.light)
-    filterUsefulData(lights, lightToTemp, usefulMap, 'light', 'temp')
-    let temps = usefulMap.map(o => o.temp)
-    filterUsefulData(temps, tempToHumid, usefulMap, 'temp', 'humid')
-    let humids = usefulMap.map(o => o.humid)
-    filterUsefulData(humids, humidToLoc, usefulMap, 'humid', 'loc')
+    let soils = filterUsefulSeedRanges(seeds, seedToSoil, 'seed', 'soil')
+    let ferts = filterUsefulSeedRanges(soils, soilToFert, 'soil', 'fert')
+    let waters = filterUsefulSeedRanges(ferts, fertToWater, 'fert', 'water')
+    let lights = filterUsefulSeedRanges(waters, waterToLight, 'water', 'light')
+    let temps = filterUsefulSeedRanges(lights, lightToTemp, 'light', 'temp')
+    let humids = filterUsefulSeedRanges(temps, tempToHumid, 'temp', 'humid')
+    let locs = filterUsefulSeedRanges(humids, humidToLoc, 'humid', 'loc')
 
-    let lowestLoc = Math.min(...usefulMap.map(o => o.loc))
+    let lowestLoc = Math.min(...locs.map(loc => loc[0]))
     return lowestLoc
 }
 
-var filterUsefulData = function(source, sourceToDestination, map, mapFrom, mapTo)
+var processSeeds = function(unprocessedSeeds)
 {
-    for(let s of source)
+    let seeds = []
+    for(let i = 0; i < unprocessedSeeds.length; i=i+2)
     {
-        let foundInRange = false
-        for(let std of sourceToDestination)
-        {
-            if(s >= std[1] && s < std[1] + std[2])
-            {
-                foundInRange = true
-                let linkToValue = s - std[1] + std[0]
-                let existingMap = map.filter(o => o[mapFrom] == s)
-                if(existingMap.length == 0)
-                {
-                    map.push(createMap(mapFrom, s, mapTo, linkToValue))
-                }
-                else
-                {
-                    existingMap[0][mapTo] = linkToValue
-                }
-            }
-        }
-        if(!foundInRange)
-        {
-            let existingMap = map.filter(o => o[mapFrom] == s)
-            if(existingMap.length == 0) map.push(createMap(mapFrom, s, mapTo, s))
-            else 
-            {
-                existingMap[0][mapTo] = s
-            }
-        }
+        seeds.push([unprocessedSeeds[i], unprocessedSeeds[i] + unprocessedSeeds[i+1] - 1])
     }
+    return seeds
 }
 
-var createMap = function(key1, value1, key2, value2)
+var filterUsefulSeedRanges = function(source, sourceToDestination, mapFrom, mapTo)
 {
-    let map = {}
-    map[key1] = value1
-    map[key2] = value2
-    return map
+    let rangesNotFound = [...source]
+    let ranges = []
+    while(rangesNotFound.length > 0)
+    {
+        let s = rangesNotFound.pop()
+        let entireRangeFound = false, partRangeFound = false, rangeFound = false
+        let [minNo, maxNo] = s
+        for(let sts of sourceToDestination)
+        {
+            let [dNo, sNo, count] = sts
+            let minIsIn = false, maxIsIn = false, midIsIn = false
+            if(minNo >= sNo && minNo < sNo + count) minIsIn = true
+            if(maxNo >= sNo && maxNo < sNo + count) maxIsIn = true
+            if(minNo < sNo && maxNo >= sNo + count) midIsIn = true
+            entireRangeFound = minIsIn && maxIsIn
+            partRangeFound = minIsIn || maxIsIn
+            let difference = dNo - sNo
+
+            if(entireRangeFound)
+            {
+                ranges.push([minNo + difference, maxNo + difference])
+                rangeFound = true
+                break
+            }
+
+            else if(partRangeFound)
+            {
+                if(minIsIn)
+                {
+                    ranges.push([minNo + difference, dNo + count - 1])
+                    minNo = sNo + count
+                }
+                if(maxIsIn)
+                {
+                    ranges.push([dNo, maxNo + difference])
+                    maxNo = sNo - 1
+                }
+            }
+
+            if(minNo + difference == 0)
+            {
+                console.log('stop here')
+            }
+
+            if(midIsIn)
+            {
+                
+                rangesNotFound.push([minNo, sNo - 1])
+                rangesNotFound.push([sNo + count, maxNo])
+                ranges.push([sNo + difference, sNo + count + difference])
+                rangeFound = true
+                break
+            }
+
+            if(!entireRangeFound && partRangeFound)
+            {
+                rangesNotFound.push([minNo, maxNo])
+                rangeFound = true
+                break
+            }
+        }
+        if(!rangeFound)
+        {
+            ranges.push([minNo, maxNo])
+        }
+    }
+
+    return ranges
 }
 
 var formatInput = function(input)
@@ -315,4 +385,5 @@ var formatInput = function(input)
 }
 
 // console.log(formatInput(dummyInput))
+// console.log(formatInput(dummyInput2))
 console.log(formatInput(actualInput))
