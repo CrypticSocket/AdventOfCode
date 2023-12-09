@@ -1056,7 +1056,7 @@ var setCharacterScores = function()
     }
 }
 
-var formatData = function(data)
+var getHistory = function(data)
 {
     let hands = []
     for(let line of data)
@@ -1140,7 +1140,7 @@ var formatInput = function(input)
 {
     let data = input.split('\n')
     setCharacterScores()
-    let hands = formatData(data)
+    let hands = getHistory(data)
     let score = rankHands(hands)
     return score.map(x => x.actualBid).reduce((a, b) => a + b)
 }

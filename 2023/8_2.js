@@ -796,7 +796,7 @@ HXH = (CQX, QJK)`
 
 let startPositions = []
 
-var formatData = function(data)
+var getHistory = function(data)
 {
     let map = {}
     data = data.replaceAll(/[() ]/g, '').split('\n')
@@ -858,7 +858,7 @@ var findStartingPositions = function(map)
 var formatInput = function(input)
 {
     let [directions, data] = input.split('\n\n')
-    let map = formatData(data)
+    let map = getHistory(data)
     findStartingPositions(map)
     let steps = findSteps(map, directions)
     return steps

@@ -796,7 +796,7 @@ HXH = (CQX, QJK)`
 const startPosition = 'AAA'
 const endPosition = 'ZZZ'
 
-var formatData = function(data)
+var getHistory = function(data)
 {
     let map = {}
     data = data.replaceAll(/[() ]/g, '').split('\n')
@@ -825,7 +825,7 @@ var findSteps = function(map, directions)
 var formatInput = function(input)
 {
     let [directions, data] = input.split('\n\n')
-    let map = formatData(data)
+    let map = getHistory(data)
     let steps = findSteps(map, directions)
     return steps
 }
