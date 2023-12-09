@@ -1,6 +1,6 @@
 /*
 Learnings: 
-Silly silly bracket mistakes cost me time. Tch.
+Worked on the first try 😎
 */
 
 let dummyInput = `RL

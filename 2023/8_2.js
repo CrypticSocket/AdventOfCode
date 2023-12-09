@@ -1,6 +1,7 @@
 /*
 Learnings: 
-Silly silly bracket mistakes cost me time. Tch.
+FORGOT HOW TO GET LCM efficiently and created a flawed logic.
+But thanks to this I remember now XD
 */
 
 let dummyInput = `RL
