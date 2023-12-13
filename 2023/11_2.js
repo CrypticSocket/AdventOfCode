@@ -1,6 +1,8 @@
 /*
 Learnings: 
-Okay, this was VERY easy....
+100 times larger is tricky
+Adding 1 more is 2 times larger
+Adding 99 is 100 times larger. :)
 */
 
 let dummyInput = `...#......
@@ -167,6 +169,8 @@ let cosmicExpansion = {
     j : []
 }
 
+const ExpansionMultiplier = 1000000 - 1
+
 var findGalaxies = function(data)
 {
     let galaxies = []
@@ -224,8 +228,8 @@ let findDistances = function(galaxies)
             const [x1,y1] = galaxies[j].split(',').map(Number)
             let [minX, maxX] = [Math.min(x,x1), Math.max(x,x1)]
             let [minY, maxY] = [Math.min(y,y1), Math.max(y,y1)]
-            let iExpansion = cosmicExpansion.i.filter(e => e > minX && maxX > e).length
-            let jExpansion = cosmicExpansion.j.filter(e => e > minY && maxY > e).length
+            let iExpansion = cosmicExpansion.i.filter(e => e > minX && maxX > e).length * ExpansionMultiplier
+            let jExpansion = cosmicExpansion.j.filter(e => e > minY && maxY > e).length * ExpansionMultiplier
             let distance = Math.abs(x - x1) + Math.abs(y - y1) + iExpansion + jExpansion
             // console.log(`${i + 1} - ${j + 1} is ${distance}`)
             distances.push(distance)
