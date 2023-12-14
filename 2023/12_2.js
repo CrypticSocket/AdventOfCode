@@ -1,6 +1,8 @@
 /*
 Learnings: 
-Okay, this was VERY easy....
+If there is a recursion, there is a way to cache..
+
+See what I did there? ;)
 */
 
 let dummyInput = `???.### 1,1,3
@@ -1022,13 +1024,6 @@ var FindTotalCombinations = function(data)
         correctData = correctData.split(',').map(Number)
 
         totalCombinations += FindPossibleCombinations(damagedData, correctData)
-        // console.log("\n\n\t\t" + damagedData + ' ' + totalCombinations)
-        // let totalDamagedSprings = correctData.reduce((a,b) => a + b)
-        // let totalPositions = line.length
-        // let [unknown, proper, damaged] = findCounts(line)
-
-        // let remainingUnallocatedSprings = totalDamagedSprings - damaged
-        // findDistributionFromLHS(damagedData, correctData)
     }
     return totalCombinations
 }
