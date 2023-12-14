@@ -16,13 +16,6 @@ let dummyInput = `...#......
 .......#..
 #...#.....`
 
-
-let dummyInput2 = `7-F7-
-.FJ|7
-SJLL7
-|F--J
-LJ.LJ`
-
 let actualInput = `...#...........#..............#..................................................#...................#...................#..................
 ................................................................................................#..............#...........................#
 ..................................#...................#.......................................................................#.............
@@ -171,7 +164,7 @@ let cosmicExpansion = {
 
 const ExpansionMultiplier = 1000000 - 1
 
-var findGalaxies = function(data)
+var FindCombinations = function(data)
 {
     let galaxies = []
     let spaceMap = {}
@@ -205,16 +198,6 @@ var findGalaxies = function(data)
     }
 
     return galaxies
-
-    // for(let i = 0; i < cosmicExpansion.i.length; i++)
-    // {
-    //     let index = cosmicExpansion.i[i]
-    //     spaceMap.filter(galaxy => galaxy.split(',').map(Number)[0] > index).map(galaxy => {
-    //         let [x, y] = galaxy.split(',').map(Number)
-    //         x += 1
-    //         galaxy = x+','+y
-    //     })
-    // }
 }
 
 let findDistances = function(galaxies)
@@ -251,7 +234,7 @@ let addToMap = function (map, index, spaces)
 var formatInput = function(input)
 {
     let data = input.split('\n').map(l => l.split(''))
-    let galaxies = findGalaxies(data)
+    let galaxies = FindCombinations(data)
     let distances = findDistances(galaxies)
 
     reset()
@@ -268,5 +251,4 @@ let reset = function()
 }
 
 console.log('Dummy Output 1 : ' + formatInput(dummyInput))
-// console.log('Dummy Output 2 : ' + formatInput(dummyInput2))
 console.log('Actual Output : ' + formatInput(actualInput))
