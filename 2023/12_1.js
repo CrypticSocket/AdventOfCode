@@ -1014,7 +1014,7 @@ let actualInput = `.?..??#?##????#...? 4,1
 ??#.???????#??#??. 1,1,9`
 
 
-var FindTotalCombinations = function(data)
+var FindReflections = function(data)
 {
     let totalCombinations = 0
     for(let line of data)
@@ -1022,12 +1022,12 @@ var FindTotalCombinations = function(data)
         let [damagedData, correctData] = line
         correctData = correctData.split(',').map(Number)
 
-        totalCombinations += FindPossibleCombinations(damagedData, correctData)
+        totalCombinations += FindRowsOrColumns(damagedData, correctData)
     }
     return totalCombinations
 }
 
-var FindPossibleCombinations = function(chars, numbers)
+var FindRowsOrColumns = function(chars, numbers)
 {
     let totalFound = 0
     if(chars.length == 0)
@@ -1044,14 +1044,14 @@ var FindPossibleCombinations = function(chars, numbers)
     
     if('.?'.indexOf(chars[0]) > -1)
     {
-        totalFound += FindPossibleCombinations(chars.slice(1), numbers)
+        totalFound += FindRowsOrColumns(chars.slice(1), numbers)
     }
     
     if('#?'.indexOf(chars[0]) > -1)
     {
         if(numbers.length > 0 && chars.length >= numbers[0] && chars[numbers[0]] != '#' && chars.slice(0, numbers[0]).indexOf('.') == -1)
         {
-            totalFound += FindPossibleCombinations(chars.slice(numbers[0] + 1), numbers.slice(1))
+            totalFound += FindRowsOrColumns(chars.slice(numbers[0] + 1), numbers.slice(1))
         }
     }
 
@@ -1061,7 +1061,7 @@ var FindPossibleCombinations = function(chars, numbers)
 var formatInput = function(input)
 {
     let data = input.split('\n').map(l => l.split(' '))
-    let possibleCombinations = FindTotalCombinations(data)
+    let possibleCombinations = FindReflections(data)
 
     return possibleCombinations
 }
