@@ -1,6 +1,8 @@
 /*
 Learnings: 
 Sometimes, SOMETIMES, recursion can actually be a muuuuuuuch worse solution :)
+Definitely made it much harder for myself than it should have been initially.
+This looked super easy. And...... it was... sorta.
 */
 
 let dummyInput = String.raw`.|...\....
