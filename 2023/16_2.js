@@ -262,7 +262,7 @@ var FindBestPathForBeam = function(data)
     return Math.max(...beamInfo)
 }
 
-var formatInput = function(input, )
+var formatInput = function(input)
 {
     clear()
     let data = input.split('\n').map(a => a.split(''))

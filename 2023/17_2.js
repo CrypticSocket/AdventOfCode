@@ -1,12 +1,8 @@
 /*
 Learnings: 
-This has been the worst day(s) of my AoC 2023 life.
-I internally cried while solving this.
-Immutability is so important sometimes. My God!
-Also, I derived Dijkstra's from BFS for this before realising that was an Algorithm
-Time spent : 9am on a Sunday to 11pm on a Monday for Part 1
-
-Also, this is a bad solution for sure. There must be some way to cache it but my brain is done for the day
+My worst efficiency code yet.
+Ran forever. 
+Changing the code was too easy but ... Someday I'll work on the efficiency of this.
 */
 
 let dummyInput = `2413432311323
@@ -226,7 +222,7 @@ var GetPosition = function(position, addV, addH)
     return position
 }
 
-var FindNeighbours = function(node, vMax, hMax, maxDistance = 3)
+var FindNeighbours = function(node, vMax, hMax, maxDistance = 10, minDistance = 4)
 {
     let neightbours = []
     let directions = new Set()
@@ -240,31 +236,59 @@ var FindNeighbours = function(node, vMax, hMax, maxDistance = 3)
     }
     else if(node.hMovement > 0)
     {
-        directions.add('U')
-        directions.add('D')
-        if(node.hMovement != maxDistance)
+        if(node.hMovement < minDistance)
+        {
             directions.add('R')
+        }
+        else
+        {
+            directions.add('U')
+            directions.add('D')
+            if(node.hMovement != maxDistance)
+                directions.add('R')
+        }
     }
     else if(node.hMovement < 0)
     {
-        directions.add('U')
-        directions.add('D')
-        if(node.hMovement != -maxDistance)
+        if(Math.abs(node.hMovement) < Math.abs(minDistance))
+        {
             directions.add('L')
+        }
+        else
+        {
+            directions.add('U')
+            directions.add('D')
+            if(node.hMovement != -maxDistance)
+                directions.add('L')
+        }
     }
     else if(node.vMovement > 0)
     {
-        if(node.vMovement != maxDistance)
+        if(node.vMovement < minDistance)
+        {
             directions.add('D')
-        directions.add('L')
-        directions.add('R')
+        }
+        else
+        {
+            if(node.vMovement != maxDistance)
+                directions.add('D')
+            directions.add('L')
+            directions.add('R')
+        }
     }
     else if(node.vMovement < 0)
     {
-        if(node.vMovement != -maxDistance)
+        if(Math.abs(node.vMovement) < Math.abs(minDistance))
+        {
             directions.add('U')
-        directions.add('L')
-        directions.add('R')
+        }
+        else
+        {
+            if(node.vMovement != -maxDistance)
+                directions.add('U')
+            directions.add('L')
+            directions.add('R')
+        }
     }
 
     if(directions.has('D') && i < vMax) neightbours.push(GetPosition(node.position, 1, 0))
