@@ -366,7 +366,7 @@ var GetCoordinates = function(a, b)
     return a + ',' + b
 }
 
-var formatInput = function(input)
+var GetResult = function(input)
 {
     clear()
     let data = input.split('\n').map(a => a.split(''))
@@ -376,4 +376,4 @@ var formatInput = function(input)
 
 // console.log('Dummy Output 1 : ' + formatInput(dummyInput))
 
-console.log('Actual Output : ' + formatInput(actualInput))
+console.log('Actual Output : ' + GetResult(actualInput))

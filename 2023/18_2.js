@@ -758,13 +758,13 @@ var ShowMap = function(map, boundaryPoints)
     return totalPoints
 }
 
-var formatInput = function(input)
+var GetResult = function(input)
 {
     let data = input.replaceAll(')','').split('\n').map(a => a.split(' (#')[1])
     let [map, boundaryPoints] = FormMap(data)
     return ShowMap(map, boundaryPoints)
 }
 
-console.log('Dummy Output 1 : ' + formatInput(dummyInput))
+console.log('Dummy Output 1 : ' + GetResult(dummyInput))
 
-console.log('Actual Output : ' + formatInput(actualInput))
+console.log('Actual Output : ' + GetResult(actualInput))

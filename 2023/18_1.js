@@ -813,7 +813,7 @@ var ShowMap = function(map, minRange, maxRange)
     return lavaHoldingCapacity
 }
 
-var formatInput = function(input)
+var GetResult = function(input)
 {
     let data = input.replaceAll(')','').split('\n').map(a => a.split(' ('))
     let [map, minRange, maxRange] = FormMap(data)
@@ -822,4 +822,4 @@ var formatInput = function(input)
 
 // console.log('Dummy Output 1 : ' + formatInput(dummyInput))
 
-console.log('Actual Output : ' + formatInput(actualInput))
+console.log('Actual Output : ' + GetResult(actualInput))
